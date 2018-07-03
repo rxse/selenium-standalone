@@ -1,6 +1,6 @@
 describe('when files are installed', function () {
+    this.timeout(5000);
     it('should not reinstall them', function (done) {
-
         var fs = require('fs');
         var path = require('path');
         var targetDir = path.join(__dirname, '..', '.selenium');

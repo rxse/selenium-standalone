@@ -565,12 +565,678 @@ describe('compute-download-urls', function() {
       })
     });
 
-    it('throws for unknown releases', function() {
+    it('does not throw for unknown releases', function() {
       ['1.0', '2.3', '10'].forEach(function (version) {
         opts.drivers.edge = { version: version };
 
-        assert.throws(function () { computeDownloadUrls(opts) });
+        assert.doesNotThrow(function () { computeDownloadUrls(opts) });
       })
+    });
+  });
+
+  describe('opera', function() {
+    beforeEach(function() {
+      opts = {
+        seleniumVersion: '1.0',
+        seleniumBaseURL: 'https://localhost',
+        drivers: {
+          opera: {}
+        }
+      };
+    });
+
+    describe('linux', function() {
+      before(function() {
+        Object.defineProperty(process, 'platform', {
+          value: 'linux'
+        });
+      });
+
+      it('uses `correct driver` for version == 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.27/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.29', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.29',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.29/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.30', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.30',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.30/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.32', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.32',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.32/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.33', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.33',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.33/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.35', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.35',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.35/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.36', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.36',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.36/operadriver_linux64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.37', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.37',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.37/operadriver_linux64.zip');
+      });
+
+      it('gets the right arch when arch is x64', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x64'
+        };
+
+        var actual = computeDownloadUrls(opts);
+        assert(actual.opera.indexOf('_linux64.zip') > 0);
+      });
+      
+      it('throws if asking an arch which is not x64', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x86'
+        };
+
+        try {
+          computeDownloadUrls(opts);
+          throw new Error('Error not thrown');
+        } catch (err) {
+          if (err && err.message === 'Only x64 architecture is available for operadriver on linux') {
+            return;
+          }
+          throw err;
+        }
+      });
+
+      it('throws if asking for versions < 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.26',
+          arch: 'x64'
+        };
+        try {
+          computeDownloadUrls(opts);
+          throw new Error('Error not thrown');
+        } catch (err) {
+          if (err && err.message === 'Only versions >= 2.27 are available for operadriver on linux') {
+            return;
+          }
+          throw err;
+        }
+      });
+
+      it('does not throw if asking for versions == 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x64'
+        };      
+        assert.doesNotThrow(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver on linux');
+      });
+
+      it('does not throw if asking for versions > 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.28',
+          arch: 'x64'
+        };
+        assert.doesNotThrow(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver on linux');
+      });
+
+      it('does not throw if asking for versions > 3.0', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '3.0',
+          arch: 'x64'
+        };
+        assert.doesNotThrow(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver on linux');
+      });
+    });
+
+    describe('mac', function() {
+      before(function() {
+        Object.defineProperty(process, 'platform', {
+          value: 'darwin'
+        });
+      });
+
+      it('uses `correct driver` for version == 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.27/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.29', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.29',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.29/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.30', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.30',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.30/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.32', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.32',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.32/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.33', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.33',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.33/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.35', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.35',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.35/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.36', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.36',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.36/operadriver_mac64.zip');
+      });
+
+      it('uses `correct driver` for version == 2.37', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.37',
+          arch: 'x64'
+        }
+
+        var actual = computeDownloadUrls(opts);
+        assert.equal(actual.opera, 'https://localhost/v.2.37/operadriver_mac64.zip');
+      });
+
+      it('gets the right arch when arch is x64', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x64'
+        };
+
+        var actual = computeDownloadUrls(opts);
+        assert(actual.opera.indexOf('_mac64.zip') > 0);
+      });
+      
+      it('throws if asking an arch which is not x64', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x86'
+        };
+
+        try {
+          computeDownloadUrls(opts);
+          throw new Error('Error not thrown');
+        } catch (err) {
+          if (err && err.message === 'Only x64 architecture is available for operadriver on mac') {
+            return;
+          }
+          throw err;
+        }
+      });
+
+      it('throws if asking for versions < 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.26',
+          arch: 'x64'
+        };
+        assert.throws(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver');
+      });
+
+      it('does not throw if asking for versions == 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.27',
+          arch: 'x64'
+        };
+        assert.doesNotThrow(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver');
+      });
+
+      it('does not throw if asking for versions > 2.27', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '2.28',
+          arch: 'x64'
+        };
+        assert.doesNotThrow(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver');
+      });
+
+      it('does not throw if asking for versions > 3.0', function() {
+        opts.drivers.opera = {
+          baseURL: 'https://localhost',
+          version: '3.0',
+          arch: 'x64'
+        };
+        assert.doesNotThrow(function() {
+          computeDownloadUrls(opts);
+        }, 'Only versions >= 2.27 are available for operadriver');
+      });
+    });
+
+    describe('win', function() {
+      before(function() {
+        Object.defineProperty(process, 'platform', {
+          value: 'win32'
+        });
+      });
+
+      describe('x86', function(){
+
+        it('uses `correct driver` for version == 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.27/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.29', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.29',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.29/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.30', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.30',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.30/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.32', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.32',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.32/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.33', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.33',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.33/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.35', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.35',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.35/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.36', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.36',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.36/operadriver_win32.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.37', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.37',
+            arch: 'x86'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.37/operadriver_win32.zip');
+        });
+  
+        it('gets the right arch when arch is x32', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x32'
+          };
+  
+          var actual = computeDownloadUrls(opts);
+          assert(actual.opera.indexOf('_win32.zip') > 0);
+        });
+        
+        it('gets the right arch when arch is x86', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x86'
+          };
+  
+          var actual = computeDownloadUrls(opts);
+          assert(actual.opera.indexOf('_win32.zip') > 0);
+        });
+  
+        it('throws if asking for versions < 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.26',
+            arch: 'x86'
+          };
+          assert.throws(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+  
+        it('does not throw if asking for versions == 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x86'
+          };
+          assert.doesNotThrow(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+  
+        it('does not throw if asking for versions > 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.28',
+            arch: 'x86'
+          };
+          assert.doesNotThrow(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+  
+        it('does not throw if asking for versions > 3.0', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '3.0',
+            arch: 'x86'
+          };
+          assert.doesNotThrow(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+      });
+
+      describe('x64', function() {
+        it('uses `correct driver` for version == 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.27/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.29', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.29',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.29/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.30', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.30',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.30/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.32', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.32',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.32/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.33', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.33',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.33/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.35', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.35',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.35/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.36', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.36',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.36/operadriver_win64.zip');
+        });
+  
+        it('uses `correct driver` for version == 2.37', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.37',
+            arch: 'x64'
+          }
+  
+          var actual = computeDownloadUrls(opts);
+          assert.equal(actual.opera, 'https://localhost/v.2.37/operadriver_win64.zip');
+        });
+  
+        it('gets the right arch when arch is x64', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x64'
+          };
+  
+          var actual = computeDownloadUrls(opts);
+          assert(actual.opera.indexOf('_win64.zip') > 0);
+        });
+      
+        it('throws if asking for versions < 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.26',
+            arch: 'x64'
+          };
+          assert.throws(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+  
+        it('does not throw if asking for versions == 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.27',
+            arch: 'x64'
+          };
+          assert.doesNotThrow(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+  
+        it('does not throw if asking for versions > 2.27', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '2.28',
+            arch: 'x64'
+          };
+          assert.doesNotThrow(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+  
+        it('does not throw if asking for versions > 3.0', function() {
+          opts.drivers.opera = {
+            baseURL: 'https://localhost',
+            version: '3.0',
+            arch: 'x64'
+          };
+          assert.doesNotThrow(function() {
+            computeDownloadUrls(opts);
+          }, 'Only versions >= 2.27 are available for operadriver');
+        });
+      });
     });
   });
 });

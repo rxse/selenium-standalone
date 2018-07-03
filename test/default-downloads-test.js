@@ -32,6 +32,7 @@ function doesDownloadExist(url, cb) {
  * are actually downloadable.
  */
 describe('default-downloads', function() {
+  this.timeout(5000);
   // Allow tests to mock `process.platform`
   before(function() {
     this.originalPlatform = Object.getOwnPropertyDescriptor(process, 'platform');
@@ -280,6 +281,94 @@ describe('default-downloads', function() {
         assert(computedUrls.firefox.indexOf('win64') > 0);
         doesDownloadExist(computedUrls.firefox, done);
       });
+    });
+  });
+
+  describe('opera', function() {
+    describe('linux', function() {
+      before(function(){
+        Object.defineProperty(process, 'platform', {
+          value: 'linux'
+        });
+      });
+
+      // No x32 for latest operadriver on linux
+
+      it('x64 download exists', function(done) {
+        opts = merge(opts, {
+          drivers: {
+            opera: {
+              arch: 'x64'
+            }
+          }
+        });
+
+        computedUrls = computeDownloadUrls(opts);
+
+        assert(computedUrls.opera.indexOf('linux64') > 0);
+        doesDownloadExist(computedUrls.opera, done);
+      });
+    });
+
+    describe('mac', function() {
+      before(function(){
+        Object.defineProperty(process, 'platform', {
+          value: 'darwin'
+        });
+      });
+
+      // No x32 for latest operadriver on mac
+
+      it('x64 download exists', function(done) {
+        opts = merge(opts, {
+          drivers: {
+            opera: {
+              arch: 'x64'
+            }
+          }
+        });
+
+        computedUrls = computeDownloadUrls(opts);
+
+        assert(computedUrls.opera.indexOf('mac64') > 0);
+        doesDownloadExist(computedUrls.opera, done);
+      });
+    });
+
+    describe('win', function() {
+      before(function(){
+        Object.defineProperty(process, 'platform', {
+          value: 'win32'
+        });
+      });
+
+      it('x86 download exists', function(done) {
+        opts = merge(opts, {
+          drivers: {
+            opera: {
+              arch: 'x86'
+            }
+          }
+        });
+        computedUrls = computeDownloadUrls(opts);
+
+        assert(computedUrls.opera.indexOf('win32') > 0);
+        doesDownloadExist(computedUrls.opera, done);
+      });
+
+      it('x64 download exists', function(done) {
+        opts = merge(opts, {
+          drivers: {
+            opera: {
+              arch: 'x64'
+            }
+          }
+        });
+        computedUrls = computeDownloadUrls(opts);
+
+        assert(computedUrls.opera.indexOf('win64') > 0);
+        doesDownloadExist(computedUrls.opera, done);
+      });    
     });
   });
 });
