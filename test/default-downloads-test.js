@@ -341,20 +341,6 @@ describe('default-downloads', function() {
         });
       });
 
-      it('x64 download exists', function(done) {
-        opts = merge(opts, {
-          drivers: {
-            opera: {
-              arch: 'x64'
-            }
-          }
-        });
-        computedUrls = computeDownloadUrls(opts);
-
-        assert(computedUrls.opera.indexOf('win64') > 0);
-        doesDownloadExist(computedUrls.opera, done);
-      });
-
       it('x86 download exists', function(done) {
         opts = merge(opts, {
           drivers: {
@@ -368,6 +354,20 @@ describe('default-downloads', function() {
         assert(computedUrls.opera.indexOf('win32') > 0);
         doesDownloadExist(computedUrls.opera, done);
       });
+
+      it('x64 download exists', function(done) {
+        opts = merge(opts, {
+          drivers: {
+            opera: {
+              arch: 'x64'
+            }
+          }
+        });
+        computedUrls = computeDownloadUrls(opts);
+
+        assert(computedUrls.opera.indexOf('win64') > 0);
+        doesDownloadExist(computedUrls.opera, done);
+      });    
     });
   });
 });

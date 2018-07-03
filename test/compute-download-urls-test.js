@@ -725,7 +725,7 @@ describe('compute-download-urls', function() {
           baseURL: 'https://localhost',
           version: '2.27',
           arch: 'x64'
-        };
+        };      
         assert.doesNotThrow(function() {
           computeDownloadUrls(opts);
         }, 'Only versions >= 2.27 are available for operadriver on linux');
