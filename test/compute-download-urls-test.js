@@ -715,9 +715,15 @@ describe('compute-download-urls', function() {
           version: '2.26',
           arch: 'x64'
         };
-        assert.throws(function() {
+        try {
           computeDownloadUrls(opts);
-        }, 'Only versions >= 2.27 are available for operadriver on linux');
+          throw new Error('Error not thrown');
+        } catch (err) {
+          if (err && err.message === 'Only versions >= 2.27 are available for operadriver on linux') {
+            return;
+          }
+          throw err;
+        }
       });
 
       it('does not throw if asking for versions == 2.27', function() {

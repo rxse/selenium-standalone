@@ -32,6 +32,7 @@ function doesDownloadExist(url, cb) {
  * are actually downloadable.
  */
 describe('default-downloads', function() {
+  this.timeout(5000);
   // Allow tests to mock `process.platform`
   before(function() {
     this.originalPlatform = Object.getOwnPropertyDescriptor(process, 'platform');
